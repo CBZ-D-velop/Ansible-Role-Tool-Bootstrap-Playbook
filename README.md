@@ -18,6 +18,18 @@
 
 An Ansible role to bootstrap and create other playbooks.
 
+The Playbook Bootstrap role automates the creation of a basic structure for an Ansible playbook. It sets up the necessary folders, files, and configurations to kickstart your playbook development process. Key features of this role include:
+
+Predefined Folder Structure: The role creates a well-organized folder structure, including molecule, tests, and other necessary directories. This ensures consistency and facilitates modular organization of your playbook components.
+
+Code Quality Tools: Configuration files such as .ansible-lint, .ansible.cfg, and .yamllint are included to enforce code quality standards and promote best practices in your playbook development.
+
+Collaboration Support: The inclusion of a CODEOWNERS file enables seamless collaboration and ownership assignment within your Git repository.
+
+Molecule Integration: The role comes preconfigured with Molecule, a testing framework for Ansible. It includes default Molecule scenarios and GitLab CI configuration for streamlined testing and continuous integration.
+
+By utilizing the Playbook Bootstrap role, you can expedite the creation of new Ansible playbooks, maintain code quality, and foster efficient collaboration within your development team.
+
 ## Folder structure
 
 By default Ansible will look in each directory within a role for a main.yml file for relevant content (also man.yml and main):
@@ -145,7 +157,8 @@ bootstrap_root_files:
   - ".ansible-lint"
   - ".ansible.cfg"
   - ".yamllint"
-
+  - "CODEOWNERS"
+  - ".gitlab-ci.yml"
 ```
 
 The best way is to modify these vars by copy the ./default/main.yml file into the ./vars and edit with your personnals requirements.
@@ -187,6 +200,7 @@ To run this role, you can copy the molecule/default/converge.yml playbook and ad
     bootstrap_playbook_meta_playbook_name: "{{ inv_bootstrap_playbook_meta_playbook_name }}"
     bootstrap_playbook_meta_namespace: "{{ inv_bootstrap_playbook_meta_namespace }}"
     bootstrap_playbook_technologies: "{{ inv_bootstrap_playbook_technologies }}"
+    bootstrap_playbook_meta_company: "{{ inv_bootstrap_playbook_meta_company }}"
     ansible.builtin.include_role:
     name: "labocbz.bootstrap_playbook"
 ```

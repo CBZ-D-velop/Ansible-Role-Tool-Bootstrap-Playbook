@@ -5,3 +5,9 @@
   hosts: "all"
   gather_facts: false
   tasks:
+
+    - name: "Ensure bootstraped playbook directory exists"
+      register: bootstraped_playbook_directory
+      failed_when: not bootstraped_playbook_directory.stat.exists
+      ansible.builtin.stat:
+        path: "{{ inv_bootstrap_playbook_base_path }}/{{ inv_bootstrap_playbook_meta_namespace }}.{{ inv_bootstrap_playbook_meta_playbook_name }}"
