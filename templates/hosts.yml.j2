@@ -1,0 +1,6 @@
+---
+all:
+  children:
+    local:
+      hosts:
+        molecule-local-instance-1-{{ bootstrap_playbook_meta_playbook_name.replace("_", "-") }}:

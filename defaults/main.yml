@@ -1,0 +1,47 @@
+---
+# The current user and group to create file
+bootstrap_playbook_user: "root"
+# The base path on where you want your playbook
+bootstrap_playbook_base_path: "/root"
+
+# Your author name
+bootstrap_playbook_meta_author: "Lord Robin Crombez"
+# The namespace of your playbook
+bootstrap_playbook_meta_namespace: "labocbz"
+# The playbook name
+bootstrap_playbook_meta_playbook_name: "my_new_playbook"
+# The little description for the meta file and the readme
+bootstrap_playbook_meta_description: "This is a limited description for the meta."
+# Your compangy / lab name
+bootstrap_playbook_meta_company: "Labo-CBZ"
+# The licence you wanna put on it (MIT file imported)
+bootstrap_playbook_meta_license: "MIT"
+# Some tags you want to put in plus of the base one
+bootstrap_playbook_tags:
+  - "UNIX"
+
+# The driver you use for molecule
+bootstrap_playbook_molecule_driver: "docker"
+
+# The path of your future playbook
+bootstrap_playbook_path: "{{ bootstrap_playbook_base_path }}/{{ bootstrap_playbook_meta_namespace }}.{{ bootstrap_playbook_meta_playbook_name }}"
+
+# A list of folder to create
+bootstrap_playbook_folders:
+  - "molecule"
+  - "molecule/default"
+  - "molecule/gitlabci"
+  - "tests"
+  - "tests/tower"
+  - "tests/inventory"
+  - "tests/inventory/group_vars"
+  - "tests/inventory/host_vars"
+  - "tests/certs"
+
+# Some file to import in the root folder of the future playbook
+bootstrap_root_files:
+  - ".ansible-lint"
+  - ".ansible.cfg"
+  - ".yamllint"
+  - "CODEOWNERS"
+  - ".gitlab-ci.yml"

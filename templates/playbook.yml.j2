@@ -1,0 +1,11 @@
+---
+- name: "{{ bootstrap_playbook_meta_namespace }}.{{ bootstrap_playbook_meta_playbook_name }}"
+  hosts: "all"
+  gather_facts: true
+  remote_user: root
+  strategy: free
+  become: true
+  become_method: sudo
+  become_user: root
+
+  tasks:
