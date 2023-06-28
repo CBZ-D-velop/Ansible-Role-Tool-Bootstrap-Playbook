@@ -117,6 +117,7 @@
         - { src: "files/verify.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/verify.yml" }
         - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/requirements.yml" }
         - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/requirements.yml" }
+        - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/requirements.yml" }
       loop_control:
         loop_var: file
       ansible.builtin.copy:
