@@ -1,4 +1,4 @@
-# Ansible role: labocbz.bootstrap_playbook
+# Ansible role: tool.bootstrap_playbook
 
 ![Licence Status](https://img.shields.io/badge/licence-MIT-brightgreen)
 ![CI Status](https://img.shields.io/badge/CI-success-brightgreen)
