@@ -1,0 +1,10 @@
+---
+inv_bootstrap_playbook_base_path: "/root"
+inv_bootstrap_playbook_meta_playbook_name: "my_new_playbook"
+inv_bootstrap_playbook_meta_namespace: "labocbz"
+inv_bootstrap_playbook_meta_company: "Labo-CBZ"
+inv_bootstrap_playbook_technologies:
+  - "UNIX"
+  - "Ansible"
+  - "Shell"
+  - "PHP"

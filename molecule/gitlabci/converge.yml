@@ -1,0 +1,22 @@
+---
+- name: "Converge"
+  hosts: "all"
+  tasks:
+    # replace these tasks with whatever you find suitable to test
+    - name: "Copy something to test use of synchronize module"
+      ansible.builtin.copy:
+        src: "/etc/hosts"
+        dest: "/tmp/hosts-from-controller"
+        mode: 0700
+
+    - name: "Include tool.bootstrap_playbook"
+      tags:
+        - "tool.bootstrap_playbook"
+      vars:
+        bootstrap_playbook_base_path: "{{ inv_bootstrap_playbook_base_path }}"
+        bootstrap_playbook_meta_playbook_name: "{{ inv_bootstrap_playbook_meta_playbook_name }}"
+        bootstrap_playbook_meta_namespace: "{{ inv_bootstrap_playbook_meta_namespace }}"
+        bootstrap_playbook_technologies: "{{ inv_bootstrap_playbook_technologies }}"
+        bootstrap_playbook_meta_company: "{{ inv_bootstrap_playbook_meta_company }}"
+      ansible.builtin.include_role:
+        name: "tool.bootstrap_playbook"

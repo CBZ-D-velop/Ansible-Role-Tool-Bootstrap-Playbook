@@ -1,0 +1,128 @@
+---
+- name: "Check if folder for the playbook {{ bootstrap_playbook_meta_playbook_name }} exist"
+  register: folder_check
+  ansible.builtin.stat:
+    path: "{{ bootstrap_playbook_path }}"
+
+- name: "Boostrap the playbook {{ bootstrap_playbook_meta_playbook_name }}"
+  when: not folder_check.stat.exists
+  block:
+    - name: "Create folders"
+      block:
+        - name: "Create root/main directory"
+          ansible.builtin.file:
+            path: "{{ bootstrap_playbook_path }}"
+            state: directory
+            owner: "{{ bootstrap_playbook_user }}"
+            group: "{{ bootstrap_playbook_user }}"
+            mode: 0700
+
+        - name: "Create all sub directories"
+          loop: "{{ bootstrap_playbook_folders }}"
+          loop_control:
+            loop_var: folder
+          ansible.builtin.file:
+            path: "{{ bootstrap_playbook_path }}/{{ folder }}"
+            state: directory
+            recurse: yes
+            owner: "{{ bootstrap_playbook_user }}"
+            group: "{{ bootstrap_playbook_user }}"
+            mode: 0700
+
+    - name: "Import files"
+      block:
+        - name: "Import all README.md"
+          loop: "{{ bootstrap_playbook_folders }}"
+          loop_control:
+            loop_var: folder
+          ansible.builtin.copy:
+            src: "files/README.md"
+            dest: "{{ bootstrap_playbook_path }}/{{ folder }}/README.md"
+            owner: "{{ bootstrap_playbook_user }}"
+            group: "{{ bootstrap_playbook_user }}"
+            mode: 0700
+
+        - name: "Import all configuration files"
+          loop: "{{ bootstrap_root_files }}"
+          loop_control:
+            loop_var: file
+          ansible.builtin.copy:
+            src: "files/{{ file }}"
+            dest: "{{ bootstrap_playbook_path }}/{{ file }}"
+            owner: "{{ bootstrap_playbook_user }}"
+            group: "{{ bootstrap_playbook_user }}"
+            mode: 0700
+
+    - name: "Template base elements for playbook {{ bootstrap_playbook_meta_playbook_name }}"
+      loop:
+        - { src: "templates/README.md.j2", dest: "{{ bootstrap_playbook_path }}/README.md" }
+        - { src: "templates/LICENCE.j2", dest: "{{ bootstrap_playbook_path }}/LICENCE" }
+        - { src: "templates/playbook.yml.j2", dest: "{{ bootstrap_playbook_path }}/playbook.yml" }
+      loop_control:
+        loop_var: file
+      ansible.builtin.template:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "{{ bootstrap_playbook_user }}"
+        group: "{{ bootstrap_playbook_user }}"
+        mode: 0700
+
+    - name: "Template elements for inventory and testing for playbook {{ bootstrap_playbook_meta_playbook_name }}"
+      loop:
+        - { src: "templates/hosts.yml.j2", dest: "{{ bootstrap_playbook_path }}/tests/inventory/hosts.yml" }
+        - { src: "templates/host_file.yml.j2", dest: "{{ bootstrap_playbook_path }}/tests/inventory/host_vars/molecule-local-instance-1-{{ bootstrap_playbook_meta_playbook_name.replace('_', '-') }}.yml" }
+      loop_control:
+        loop_var: file
+      ansible.builtin.template:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "{{ bootstrap_playbook_user }}"
+        group: "{{ bootstrap_playbook_user }}"
+        mode: 0700
+
+    - name: "Copy elements for inventory and testing for playbook {{ bootstrap_playbook_meta_playbook_name }}"
+      loop:
+        - { src: "files/local.yml", dest: "{{ bootstrap_playbook_path }}/tests/inventory/group_vars/local.yml" }
+        - { src: "files/tower.yml", dest: "{{ bootstrap_playbook_path }}/tests/tower/tower.yml" }
+        - { src: "files/main-certs.yml", dest: "{{ bootstrap_playbook_path }}/tests/certs/main.yml" }
+      loop_control:
+        loop_var: file
+      ansible.builtin.copy:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "{{ bootstrap_playbook_user }}"
+        group: "{{ bootstrap_playbook_user }}"
+        mode: 0700
+
+    - name: "Template Molecule files for playbook {{ bootstrap_playbook_meta_playbook_name }}"
+      loop:
+        - { src: "templates/molecule_default.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/default/molecule.yml" }
+        - { src: "templates/molecule_gitlabci.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/molecule.yml" }
+        - { src: "templates/molecule_converge.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/default/converge.yml" }
+        - { src: "templates/molecule_converge.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/converge.yml" }
+      loop_control:
+        loop_var: file
+      ansible.builtin.template:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "{{ bootstrap_playbook_user }}"
+        group: "{{ bootstrap_playbook_user }}"
+        mode: 0700
+
+    - name: "Import Molecule files for playbook {{ bootstrap_playbook_meta_playbook_name }}"
+      loop:
+        - { src: "files/prepare.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/prepare.yml" }
+        - { src: "files/prepare.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/prepare.yml" }
+        - { src: "files/verify.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/verify.yml" }
+        - { src: "files/verify.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/verify.yml" }
+        - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/requirements.yml" }
+        - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/requirements.yml" }
+        - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/requirements.yml" }
+      loop_control:
+        loop_var: file
+      ansible.builtin.copy:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "{{ bootstrap_playbook_user }}"
+        group: "{{ bootstrap_playbook_user }}"
+        mode: 0700
