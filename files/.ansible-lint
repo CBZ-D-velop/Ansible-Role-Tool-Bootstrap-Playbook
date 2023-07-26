@@ -14,6 +14,7 @@ exclude_paths:
   - test/schemas/
   - .yamllint
   - .ansible-lint
+  - tests/
 # parseable: true
 # quiet: true
 # strict: true
