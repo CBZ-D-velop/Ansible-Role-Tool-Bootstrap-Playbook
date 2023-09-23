@@ -5,14 +5,14 @@
   gather_facts: true
   tasks:
 
-    - name: "Include cryptographic content var file"
-      ansible.builtin.include_vars: "../../tests/certs/main.yml"
+    #- name: "Include cryptographic content var file"
+    #  ansible.builtin.include_vars: "../../tests/certs/main.yml"
 
     - name: "Include labocbz.prepare_host"
       tags:
         - "labocbz.prepare_host"
       ansible.builtin.include_role:
-        name: "../../roles/labocbz.prepare_host"
+        name: "labocbz.prepare_host"
 
     - name: "Gather facts from all hosts"
       delegate_to: "{{ item }}"
@@ -28,14 +28,28 @@
       changed_when: output.rc != 0
       ansible.builtin.shell: "echo \"{{ hostvars[host]['ansible_default_ipv4']['address'] }}  {{ host }} # from Molecule\" >> /etc/hosts"
 
-    - name: "Import cryptographic content if needed"
+    - name: "Import cryptographic content if needed (cert)"
       run_once: yes
       loop: "{{ inv_cert_bundles }}"
       loop_control:
         loop_var: bundle
+      when: inv_cert_bundles is defined and bundle.type == "cert"
       ansible.builtin.copy:
         src: "../../tests/certs/{{ bundle.name }}.zip"
         dest: "/tmp/{{ bundle.name }}.zip"
+        owner: "root"
+        group: "root"
+        mode: 0700
+
+    - name: "Import cryptographic content if needed (CA)"
+      run_once: yes
+      loop: "{{ inv_cert_bundles }}"
+      loop_control:
+        loop_var: bundle
+      when: inv_cert_bundles is defined and bundle.type == "CA"
+      ansible.builtin.copy:
+        src: "../../tests/certs/{{ bundle.name }}"
+        dest: "/tmp/{{ bundle.name }}"
         owner: "root"
         group: "root"
         mode: 0700
@@ -46,6 +60,7 @@
       loop: "{{ inv_cert_bundles }}"
       loop_control:
         loop_var: bundle
+      when: inv_cert_bundles is defined
       vars:
         add_certificates_bundle_name: "{{ bundle.name }}"
         add_certificates_bundle_type: "{{ bundle.type }}"
