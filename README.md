@@ -201,6 +201,7 @@ To run this role, you can copy the molecule/default/converge.yml playbook and ad
     bootstrap_playbook_meta_namespace: "{{ inv_bootstrap_playbook_meta_namespace }}"
     bootstrap_playbook_technologies: "{{ inv_bootstrap_playbook_technologies }}"
     bootstrap_playbook_meta_company: "{{ inv_bootstrap_playbook_meta_company }}"
+    bootstrap_playbook_meta_description: "{{ inv_bootstrap_playbook_meta_description }}"
     ansible.builtin.include_role:
     name: "labocbz.bootstrap_playbook"
 ```
