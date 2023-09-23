@@ -37,6 +37,7 @@ bootstrap_playbook_folders:
   - "tests/inventory/group_vars"
   - "tests/inventory/host_vars"
   - "tests/certs"
+  - "meta"
 
 # Some file to import in the root folder of the future playbook
 bootstrap_root_files:

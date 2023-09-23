@@ -55,6 +55,7 @@
 
     - name: "Template base elements for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
+        - { src: "templates/meta_main.yml.j2", dest: "{{ bootstrap_role_path }}/meta/main.yml" }
         - { src: "templates/README.md.j2", dest: "{{ bootstrap_playbook_path }}/README.md" }
         - { src: "templates/LICENCE.j2", dest: "{{ bootstrap_playbook_path }}/LICENCE" }
         - { src: "templates/playbook.yml.j2", dest: "{{ bootstrap_playbook_path }}/playbook.yml" }
