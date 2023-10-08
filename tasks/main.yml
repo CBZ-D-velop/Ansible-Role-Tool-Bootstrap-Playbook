@@ -15,7 +15,7 @@
             state: directory
             owner: "{{ bootstrap_playbook_user }}"
             group: "{{ bootstrap_playbook_user }}"
-            mode: 0700
+            mode: "0700"
 
         - name: "Create all sub directories"
           loop: "{{ bootstrap_playbook_folders }}"
@@ -27,7 +27,7 @@
             recurse: yes
             owner: "{{ bootstrap_playbook_user }}"
             group: "{{ bootstrap_playbook_user }}"
-            mode: 0700
+            mode: "0700"
 
     - name: "Import files"
       block:
@@ -40,7 +40,7 @@
             dest: "{{ bootstrap_playbook_path }}/{{ folder }}/README.md"
             owner: "{{ bootstrap_playbook_user }}"
             group: "{{ bootstrap_playbook_user }}"
-            mode: 0700
+            mode: "0700"
 
         - name: "Import all configuration files"
           loop: "{{ bootstrap_root_files }}"
@@ -51,7 +51,7 @@
             dest: "{{ bootstrap_playbook_path }}/{{ file }}"
             owner: "{{ bootstrap_playbook_user }}"
             group: "{{ bootstrap_playbook_user }}"
-            mode: 0700
+            mode: "0700"
 
     - name: "Template base elements for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
@@ -66,7 +66,7 @@
         dest: "{{ file.dest }}"
         owner: "{{ bootstrap_playbook_user }}"
         group: "{{ bootstrap_playbook_user }}"
-        mode: 0700
+        mode: "0700"
 
     - name: "Template elements for inventory and testing for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
@@ -79,7 +79,7 @@
         dest: "{{ file.dest }}"
         owner: "{{ bootstrap_playbook_user }}"
         group: "{{ bootstrap_playbook_user }}"
-        mode: 0700
+        mode: "0700"
 
     - name: "Copy elements for inventory and testing for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
@@ -93,7 +93,7 @@
         dest: "{{ file.dest }}"
         owner: "{{ bootstrap_playbook_user }}"
         group: "{{ bootstrap_playbook_user }}"
-        mode: 0700
+        mode: "0700"
 
     - name: "Template Molecule files for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
@@ -108,7 +108,7 @@
         dest: "{{ file.dest }}"
         owner: "{{ bootstrap_playbook_user }}"
         group: "{{ bootstrap_playbook_user }}"
-        mode: 0700
+        mode: "0700"
 
     - name: "Import Molecule files for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
@@ -126,4 +126,4 @@
         dest: "{{ file.dest }}"
         owner: "{{ bootstrap_playbook_user }}"
         group: "{{ bootstrap_playbook_user }}"
-        mode: 0700
+        mode: "0700"
