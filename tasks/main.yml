@@ -98,9 +98,9 @@
     - name: "Template Molecule files for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
         - { src: "templates/molecule_default.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/default/molecule.yml" }
-        - { src: "templates/molecule_gitlabci.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/molecule.yml" }
+        - { src: "templates/molecule_cicd-debian-11.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/cicd-debian-11/molecule.yml" }
         - { src: "templates/molecule_converge.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/default/converge.yml" }
-        - { src: "templates/molecule_converge.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/converge.yml" }
+        - { src: "templates/molecule_converge.yml.j2", dest: "{{ bootstrap_playbook_path }}/molecule/cicd-debian-11/converge.yml" }
       loop_control:
         loop_var: file
       ansible.builtin.template:
@@ -113,11 +113,11 @@
     - name: "Import Molecule files for playbook {{ bootstrap_playbook_meta_playbook_name }}"
       loop:
         - { src: "files/prepare.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/prepare.yml" }
-        - { src: "files/prepare.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/prepare.yml" }
+        - { src: "files/prepare.yml", dest: "{{ bootstrap_playbook_path }}/molecule/cicd-debian-11/prepare.yml" }
         - { src: "files/verify.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/verify.yml" }
-        - { src: "files/verify.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/verify.yml" }
+        - { src: "files/verify.yml", dest: "{{ bootstrap_playbook_path }}/molecule/cicd-debian-11/verify.yml" }
         - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/default/requirements.yml" }
-        - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/gitlabci/requirements.yml" }
+        - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/molecule/cicd-debian-11/requirements.yml" }
         - { src: "files/requirements.yml", dest: "{{ bootstrap_playbook_path }}/requirements.yml" }
       loop_control:
         loop_var: file

@@ -30,7 +30,7 @@ bootstrap_playbook_path: "{{ bootstrap_playbook_base_path }}/{{ bootstrap_playbo
 bootstrap_playbook_folders:
   - "molecule"
   - "molecule/default"
-  - "molecule/gitlabci"
+  - "molecule/cicd-debian-11"
   - "tests"
   - "tests/tower"
   - "tests/inventory"
