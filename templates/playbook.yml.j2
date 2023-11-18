@@ -1,6 +1,6 @@
 ---
 - name: "{{ bootstrap_playbook_meta_namespace }}.{{ bootstrap_playbook_meta_playbook_name }}"
-  hosts: "all"
+  hosts: "{{ tower_env | default([]) }}"
   gather_facts: true
   remote_user: root
   become: true
