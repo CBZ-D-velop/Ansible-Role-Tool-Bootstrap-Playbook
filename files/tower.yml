@@ -1,2 +1,2 @@
 ---
-tower_temp: true # Remove / Replace this var.
+tower_env: "all"
