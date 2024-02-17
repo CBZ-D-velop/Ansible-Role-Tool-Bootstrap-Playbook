@@ -15,6 +15,13 @@ stages:
 #################### actions
 ###############################################################################
 
+# As a GitLab ci, we use the default template :)
+sast:
+  stage: gitlab-test
+include:
+- template: Security/SAST.gitlab-ci.yml
+  allow_failure: false
+
 yaml_lint:
   stage: lint
   image: $NEXUS_DOCKER_PROXY_ADDRESS/$DOCKER_IMAGE_YAML_LINT
@@ -30,8 +37,6 @@ yaml_lint:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
-  needs:
-    - "gitlab-test"
 
 jinja_lint:
   stage: lint
@@ -47,8 +52,6 @@ jinja_lint:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
-  needs:
-    - "gitlab-test"
 
 ansible_lint:
   stage: lint
@@ -64,8 +67,6 @@ ansible_lint:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
-  needs:
-    - "gitlab-test"
 
 .molecule_test: &molecule_test
   stage: test
