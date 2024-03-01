@@ -333,7 +333,7 @@ Here you can put your change to keep a trace of your work and decisions.
 * You can now define your test sequence
 * You can now define your configuration list file
 * You can now define docker images for your scenario
-* You can now define how much hosts to create for each scenario
+* You can now define how much hosts to create for each scenarios
 
 ## Authors
 
