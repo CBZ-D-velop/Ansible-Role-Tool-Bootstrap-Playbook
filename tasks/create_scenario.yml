@@ -1,0 +1,36 @@
+- name: "create_scenario | {{ scenario.name }}"
+  block:
+    - name: "create_scenario | Template Molecule files for playbook {{ bootstrap_playbook__meta_playbook_name }}"
+      loop:
+        - { src: "templates/molecule.yml.j2", dest: "{{ bootstrap_playbook__path }}/molecule/{{ scenario.name }}/molecule.yml" }
+        - { src: "templates/prepare.yml.j2", dest: "{{ bootstrap_playbook__path }}/molecule/{{ scenario.name }}/prepare.yml" }
+        - { src: "templates/converge.yml.j2", dest: "{{ bootstrap_playbook__path }}/molecule/{{ scenario.name }}/converge.yml" }
+        - { src: "templates/verify.yml.j2", dest: "{{ bootstrap_playbook__path }}/molecule/{{ scenario.name }}/verify.yml" }
+        - { src: "templates/requirements.yml.j2", dest: "{{ bootstrap_playbook__path }}/molecule/{{ scenario.name }}/requirements.yml" }
+      loop_control:
+        loop_var: file
+      ansible.builtin.template:
+        src: "{{ file.src }}"
+        dest: "{{ file.dest }}"
+        owner: "{{ bootstrap_playbook__user }}"
+        group: "{{ bootstrap_playbook__user }}"
+        mode: "0700"
+
+    - name: "create_scenario | Copy Molecule group_vars for playbook {{ bootstrap_playbook__meta_playbook_name }}"
+      ansible.builtin.copy:
+        src: "files/main.yml"
+        dest: "{{ bootstrap_playbook__path }}/tests/inventory/group_vars/{{ scenario.target_group }}.yml"
+        owner: "{{ bootstrap_playbook__user }}"
+        group: "{{ bootstrap_playbook__user }}"
+        mode: "0700"
+
+    - name: "create_scenario | Copy Molecule hosts_vars for playbook {{ bootstrap_playbook__meta_playbook_name }}"
+      loop: "{{ range(scenario.hosts) }}"
+      loop_control:
+        loop_var: iterator
+      ansible.builtin.copy:
+        src: "files/host_var.yml"
+        dest: "{{ bootstrap_playbook__path }}/tests/inventory/host_vars/molecule-{{ scenario.target_group }}-instance-{{ iterator + 1 }}-{{ bootstrap_playbook__meta_playbook_name.replace('_', '-') }}.yml"
+        owner: "{{ bootstrap_playbook__user }}"
+        group: "{{ bootstrap_playbook__user }}"
+        mode: "0700"

@@ -113,38 +113,30 @@ Some vars a required to run this role:
 
 ```YAML
 ---
-# The current user and group to create file
-bootstrap_playbook_user: "root"
-# The base path on where you want your playbook
-bootstrap_playbook_base_path: "/root"
+bootstrap_playbook__user: "root"
+bootstrap_playbook__base_path: "/root"
 
-# Your author name
-bootstrap_playbook_meta_author: "Lord Robin Crombez"
-# The namespace of your playbook
-bootstrap_playbook_meta_namespace: "labocbz"
-# The playbook name
-bootstrap_playbook_meta_playbook_name: "my_new_playbook"
-# The little description for the meta file and the readme
-bootstrap_playbook_meta_description: "This is a limited description for the meta."
-# Your compangy / lab name
-bootstrap_playbook_meta_company: "CBZ D-velop"
-# The licence you wanna put on it (MIT file imported)
-bootstrap_playbook_meta_license: "MIT"
-# Some tags you want to put in plus of the base one
-bootstrap_playbook_tags:
+bootstrap_playbook__meta_author: "Author"
+bootstrap_playbook__meta_namespace: "root"
+bootstrap_playbook__meta_playbook_name: "my_new_role"
+bootstrap_playbook__meta_description: "This is a limited description for the meta."
+bootstrap_playbook__meta_company: "Corp"
+bootstrap_playbook__meta_license: "MIT"
+
+bootstrap_playbook__tags:
   - "UNIX"
 
 # The driver you use for molecule
-bootstrap_playbook_molecule_driver: "docker"
+bootstrap_playbook__molecule_driver: "docker"
 
-# The path of your future playbook
-bootstrap_playbook_path: "{{ bootstrap_playbook_base_path }}/{{ bootstrap_playbook_meta_namespace }}.{{ bootstrap_playbook_meta_playbook_name }}"
+# The path of your future role
+bootstrap_playbook__path: "{{ bootstrap_playbook__base_path }}/{{ bootstrap_playbook__meta_namespace }}.{{ bootstrap_playbook__meta_playbook_name }}"
 
 # A list of folder to create
-bootstrap_playbook_folders:
+bootstrap_playbook__folders:
+  - "assets"
+  - "meta"
   - "molecule"
-  - "molecule/default"
-  - "molecule/gitlabci"
   - "tests"
   - "tests/tower"
   - "tests/inventory"
@@ -152,13 +144,43 @@ bootstrap_playbook_folders:
   - "tests/inventory/host_vars"
   - "tests/certs"
 
-# Some file to import in the root folder of the future playbook
-bootstrap_root_files:
+bootstrap_playbook__molecule_scenarios:
+  - { ssl: true, hosts: 3, name: "default", target_group: "local", docker_image: "robincbz/debian-12-ansible:latest" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-11", target_group: "cicd-debian-11", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_11_ANSIBLE}" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-12", target_group: "cicd-debian-12", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_12_ANSIBLE}" }
+  - { ssl: true, hosts: 3, name: "cicd-ubuntu-22", target_group: "cicd-ubuntu-22", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_UBUNTU_22_ANSIBLE}" }
+
+bootstrap_playbook__inventory_groups:
+  - "SQL"
+  - "APACHE2"
+  - "PHP"
+
+bootstrap_playbook__requirements:
+  - { name: "labocbz.prepare_host", src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Prepare-Host.git" }
+
+bootstrap_playbook__platforms:
+    - "Debian"
+    - "Ubuntu"
+
+bootstrap_playbook__molecule_test_sequence:
+  - "destroy"
+  - "syntax"
+  - "dependency"
+  - "create"
+  - "prepare"
+  - "converge"
+  - "idempotence"
+  - "verify"
+  - "destroy"
+
+# Some file to import in the root folder of the future role
+bootstrap_playbook__configuration_files:
   - ".ansible-lint"
   - ".ansible.cfg"
   - ".yamllint"
   - "CODEOWNERS"
   - ".gitlab-ci.yml"
+
 ```
 
 The best way is to modify these vars by copy the ./default/main.yml file into the ./vars and edit with your personnals requirements.
@@ -170,14 +192,73 @@ In order to surchage vars, you have multiples possibilities but for mains cases 
 ```YAML
 # From inventory
 ---
-inv_bootstrap_playbook_base_path: "/root"
-inv_bootstrap_playbook_meta_playbook_name: "my_new_playbook"
-inv_bootstrap_playbook_meta_namespace: "labocbz"
-inv_bootstrap_playbook_technologies:
+inv_bootstrap_playbook__user: "root"
+inv_bootstrap_playbook__base_path: "/root"
+
+inv_bootstrap_playbook__meta_author: "Author"
+inv_bootstrap_playbook__meta_namespace: "root"
+inv_bootstrap_playbook__meta_playbook_name: "my_new_role"
+inv_bootstrap_playbook__meta_description: "This is a limited description for the meta."
+inv_bootstrap_playbook__meta_company: "Corp"
+inv_bootstrap_playbook__meta_license: "MIT"
+
+inv_bootstrap_playbook__tags:
   - "UNIX"
-  - "Ansible"
-  - "Shell"
+
+# The driver you use for molecule
+inv_bootstrap_playbook__molecule_driver: "docker"
+
+# The path of your future role
+inv_bootstrap_playbook__path: "{{ inv_bootstrap_playbook__base_path }}/{{ inv_bootstrap_playbook__meta_namespace }}.{{ inv_bootstrap_playbook__meta_playbook_name }}"
+
+# A list of folder to create
+inv_bootstrap_playbook__folders:
+  - "assets"
+  - "meta"
+  - "molecule"
+  - "tests"
+  - "tests/tower"
+  - "tests/inventory"
+  - "tests/inventory/group_vars"
+  - "tests/inventory/host_vars"
+  - "tests/certs"
+
+inv_bootstrap_playbook__molecule_scenarios:
+  - { ssl: true, hosts: 3, name: "default", target_group: "local", docker_image: "robincbz/debian-12-ansible:latest" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-11", target_group: "cicd-debian-11", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_11_ANSIBLE}" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-12", target_group: "cicd-debian-12", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_12_ANSIBLE}" }
+  - { ssl: true, hosts: 3, name: "cicd-ubuntu-22", target_group: "cicd-ubuntu-22", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_UBUNTU_22_ANSIBLE}" }
+
+inv_bootstrap_playbook__inventory_groups:
+  - "SQL"
+  - "APACHE2"
   - "PHP"
+
+inv_bootstrap_playbook__requirements:
+  - { name: "labocbz.prepare_host", src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Prepare-Host.git" }
+
+inv_bootstrap_playbook__platforms:
+    - "Debian"
+    - "Ubuntu"
+
+inv_bootstrap_playbook__molecule_test_sequence:
+  - "destroy"
+  - "syntax"
+  - "dependency"
+  - "create"
+  - "prepare"
+  - "converge"
+  - "idempotence"
+  - "verify"
+  - "destroy"
+
+# Some file to import in the root folder of the future role
+inv_bootstrap_playbook__configuration_files:
+  - ".ansible-lint"
+  - ".ansible.cfg"
+  - ".yamllint"
+  - "CODEOWNERS"
+  - ".gitlab-ci.yml"
 
 ```
 
@@ -192,18 +273,30 @@ all vars from to put/from AWX / Tower
 To run this role, you can copy the molecule/default/converge.yml playbook and add it into your playbook:
 
 ```YAML
-- name: "Include labocbz.bootstrap_playbook"
-    tags:
-    - "labocbz.bootstrap_playbook"
-    vars:
-    bootstrap_playbook_base_path: "{{ inv_bootstrap_playbook_base_path }}"
-    bootstrap_playbook_meta_playbook_name: "{{ inv_bootstrap_playbook_meta_playbook_name }}"
-    bootstrap_playbook_meta_namespace: "{{ inv_bootstrap_playbook_meta_namespace }}"
-    bootstrap_playbook_technologies: "{{ inv_bootstrap_playbook_technologies }}"
-    bootstrap_playbook_meta_company: "{{ inv_bootstrap_playbook_meta_company }}"
-    bootstrap_playbook_meta_description: "{{ inv_bootstrap_playbook_meta_description }}"
-    ansible.builtin.include_role:
-    name: "labocbz.bootstrap_playbook"
+- name: "Include tool.bootstrap_playbook"
+  tags:
+    - "tool.bootstrap_playbook"
+  vars:
+    bootstrap_playbook__user: "{{ inv_bootstrap_playbook__user }}"
+    bootstrap_playbook__base_path: "{{ inv_bootstrap_playbook__base_path }}"
+    bootstrap_playbook__meta_author: "{{ inv_bootstrap_playbook__meta_author }}"
+    bootstrap_playbook__meta_namespace: "{{ inv_bootstrap_playbook__meta_namespace }}"
+    bootstrap_playbook__meta_role_name: "{{ inv_bootstrap_playbook__meta_role_name }}"
+    bootstrap_playbook__meta_description: "{{ inv_bootstrap_playbook__meta_description }}"
+    bootstrap_playbook__meta_company: "{{ inv_bootstrap_playbook__meta_company }}"
+    bootstrap_playbook__meta_license: "{{ inv_bootstrap_playbook__meta_license }}"
+    bootstrap_playbook__tags: "{{ inv_bootstrap_playbook__tags }}"
+    bootstrap_playbook__molecule_driver: "{{ inv_bootstrap_playbook__molecule_driver }}"
+    bootstrap_playbook__path: "{{ inv_bootstrap_playbook__path }}"
+    bootstrap_playbook__folders: "{{ inv_bootstrap_playbook__folders }}"
+    bootstrap_playbook__molecule_scenarios: "{{ inv_bootstrap_playbook__molecule_scenarios }}"
+    bootstrap_playbook__inventory_groups: "{{ inv_bootstrap_playbook__inventory_groups }}"
+    bootstrap_playbook__requirements: "{{ inv_bootstrap_playbook__requirements }}"
+    bootstrap_playbook__platforms: "{{ inv_bootstrap_playbook__platforms }}"
+    bootstrap_playbook__molecule_test_sequence: "{{ inv_bootstrap_playbook__molecule_test_sequence }}"
+    bootstrap_playbook__configuration_files: "{{ inv_bootstrap_playbook__configuration_files }}"
+  ansible.builtin.include_role:
+    name: "tool.bootstrap_playbook"
 ```
 
 ## Architectural Decisions Records
@@ -225,6 +318,22 @@ Here you can put your change to keep a trace of your work and decisions.
 * Molecule now use remote Docker image by Lord Robin Crombez
 * Molecule now use custom Docker image in CI/CD by env vars
 * New CICD with needs and optimization
+
+### 2024-02-20: Remastered
+
+* Imported new CICD
+* Rework global on readme
+* Rename of vars __
+
+### 2024-03-01: Rework
+
+* You can now define your scenario
+* Groups vars handled
+* You can now define your requirements
+* You can now define your test sequence
+* You can now define your configuration list file
+* You can now define docker images for your scenario
+* You can now define how much hosts to create for each scenarios
 
 ## Authors
 

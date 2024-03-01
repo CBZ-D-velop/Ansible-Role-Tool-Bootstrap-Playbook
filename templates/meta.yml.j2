@@ -1,9 +1,9 @@
 galaxy_info:
-  author: "{{ bootstrap_playbook_meta_author }}"
-  namespace: "{{ bootstrap_playbook_meta_namespace }}"
-  role_name: "{{ bootstrap_playbook_meta_playbook_name }}"
-  description: "{{ bootstrap_playbook_meta_description }}"
-  company: "{{ bootstrap_playbook_meta_company }}"
+  author: "{{ bootstrap_playbook__meta_author }}"
+  namespace: "{{ bootstrap_playbook__meta_namespace }}"
+  role_name: "{{ bootstrap_playbook__meta_playbook_name }}"
+  description: "{{ bootstrap_playbook__meta_description }}"
+  company: "{{ bootstrap_playbook__meta_company }}"
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -16,7 +16,7 @@ galaxy_info:
   # - GPL-3.0-only
   # - Apache-2.0
   # - CC-BY-4.0
-  license: "{{ bootstrap_playbook_meta_license }}"
+  license: "{{ bootstrap_playbook__meta_license }}"
 
   min_ansible_version: "2.9"
 
@@ -41,10 +41,11 @@ galaxy_info:
   #   - 7
   #   - 99.99
   platforms:
-    - name: "Debian"
+{% for platform in bootstrap_playbook__platforms %}
+    - name: "{{ platform }}"
       versions:
-        - "buster"
-        - "bullseye"
+        - "all"
+{% endfor %}
 
   galaxy_tags: []
     # List tags for your role here, one per line. A tag is a keyword that describes

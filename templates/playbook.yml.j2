@@ -1,8 +1,7 @@
 ---
-- name: "{{ bootstrap_playbook_meta_namespace }}.{{ bootstrap_playbook_meta_playbook_name }}"
+- name: "{{ bootstrap_playbook__meta_namespace }}.{{ bootstrap_playbook__meta_playbook_name }}"
   hosts: "{{ tower_env | default([]) }}"
   gather_facts: true
-  remote_user: root
   become: true
   become_method: sudo
   become_user: root
