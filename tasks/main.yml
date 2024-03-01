@@ -160,7 +160,7 @@
 
     - name: "Template requirement file for playbook {{ bootstrap_playbook__meta_playbook_name }}"
       ansible.builtin.template:
-        src: "templates/requirements.yml"
+        src: "templates/requirements.yml.j2"
         dest: "{{ bootstrap_playbook__path }}/requirements.yml"
         owner: "{{ bootstrap_playbook__user }}"
         group: "{{ bootstrap_playbook__user }}"
