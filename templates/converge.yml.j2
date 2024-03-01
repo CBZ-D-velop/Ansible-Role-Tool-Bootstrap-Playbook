@@ -2,4 +2,6 @@
 - name: "Include {{ bootstrap_playbook__meta_namespace }}.{{ bootstrap_playbook__meta_playbook_name }} playbook"
   tags:
       - "{{ bootstrap_playbook__meta_namespace }}.{{ bootstrap_playbook__meta_playbook_name }}"
+  vars:
+    tower_env: "{{ scenario.target_group }}"
   ansible.builtin.import_playbook: "../../playbook.yml"
