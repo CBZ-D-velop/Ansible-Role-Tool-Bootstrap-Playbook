@@ -60,7 +60,7 @@
             mode: "0700"
 
         - name: "Import all configuration files"
-          loop: "{{ bootstrap__playbook_configuration_files }}"
+          loop: "{{ bootstrap_playbook__configuration_files }}"
           loop_control:
             loop_var: file
           ansible.builtin.copy:
