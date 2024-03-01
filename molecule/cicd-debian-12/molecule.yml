@@ -5,28 +5,25 @@ dependency:
     ignore-certs: true
 
 driver:
-  name: "{{ bootstrap_playbook_molecule_driver }}"
+  name: "docker"
 
 platforms:
-  - name: "molecule-local-instance-1-{{ bootstrap_playbook_meta_playbook_name.replace("_", "-") }}"
-    image: "robincbz/debian-11-ansible:latest"
-    command: "/sbin/init"
-    #published_ports:
-    #  - "0.0.0.0:8181:8181/tcp"
-    dockerfile: "Dockerfile"
+  - name: "molecule-cicd-debian-12-instance-1-bootstrap-playbook"
+    image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_12_ANSIBLE}"
+    hostname: "molecule-cicd-debian-12-instance-1-bootstrap-playbook"
     privileged: true
     pre_build_image: true
-    override_command: true
+    command: "/sbin/init"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
     tmpfs:
       - "/run"
       - "/tmp"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-      - "/var/lib/containerd:/var/lib/containerd"
     cgroupns_mode: "host"
     cgroup_manager: "cgroupfs"
-    #storage_opt: overlay.mount_program=/usr/bin/fuse-overlayfs
-    #storage_driver: "overlay"
+    storage_driver: "overlay2"
+    networks:
+      - name: "molecule-cicd-debian-12-bootstrap-playbook"
 
 provisioner:
   name: "ansible"
@@ -36,11 +33,11 @@ provisioner:
       group_vars: "../../tests/inventory/group_vars/"
       host_vars: "../../tests/inventory/host_vars/"
   options:
-    extra-vars: "@./tests/tower/tower.yml"
+    extra-vars: "@./../../tests/tower/tower.yml"
   log: ${MOLECULE_ANSIBLE_LOG:-true}
   env:
     ANSIBLE_CONFIG: "../../.ansible.cfg"
-    ANSIBLE_FORCE_COLOR: "True"
+    ANSIBLE_FORCE_COLOR: "true"
     # disable nologs
     MOLECULE_NOLOG: 0
     # disable destroy
@@ -54,10 +51,11 @@ verifier:
   name: "ansible"
 
 scenario:
-  name: "default"
+  name: "cicd-debian-12"
   test_sequence:
     - "destroy"
     - "syntax"
+    - "dependency"
     - "create"
     - "prepare"
     - "converge"

@@ -5,28 +5,30 @@ dependency:
     ignore-certs: true
 
 driver:
-  name: "{{ bootstrap_playbook_molecule_driver }}"
+  name: "docker"
 
 platforms:
-  - name: "molecule-local-instance-1-{{ bootstrap_playbook_meta_playbook_name.replace("_", "-") }}"
-    image: "${NEXUS_ADDRESS}/${DOCKER_IMAGE_DEBIAN_11_ANSIBLE}"
-    command: "/sbin/init"
+{% for n in range(scenario.hosts)  %}
+  - name: "molecule-{{ scenario.target_group }}-instance-{{ loop.index }}-{{ bootstrap_playbook__meta_playbook_name.replace('_', '-') }}"
+    image: "{{ scenario.docker_image }}"
+    hostname: "molecule-{{ scenario.target_group }}-instance-{{ loop.index }}-{{ bootstrap_playbook__meta_playbook_name.replace('_', '-') }}"
     #published_ports:
     #  - "0.0.0.0:8181:8181/tcp"
-    dockerfile: "Dockerfile"
     privileged: true
     pre_build_image: true
-    override_command: true
+    command: "/sbin/init"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
     tmpfs:
       - "/run"
       - "/tmp"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-      - "/var/lib/containerd:/var/lib/containerd"
     cgroupns_mode: "host"
     cgroup_manager: "cgroupfs"
-    #storage_opt: "overlay.mount_program=/usr/bin/fuse-overlayfs"
-    #storage_driver: "overlay"
+    storage_driver: "overlay2"
+    networks:
+      - name: "molecule-{{ scenario.target_group }}-{{ bootstrap_playbook__meta_playbook_name.replace('_', '-') }}"
+
+{% endfor %}
 
 provisioner:
   name: "ansible"
@@ -36,11 +38,15 @@ provisioner:
       group_vars: "../../tests/inventory/group_vars/"
       host_vars: "../../tests/inventory/host_vars/"
   options:
+{% if scenario.name == "default" %}
+    extra-vars: "@./tests/tower/tower.yml"
+{% else %}
     extra-vars: "@./../../tests/tower/tower.yml"
+{% endif %}
   log: ${MOLECULE_ANSIBLE_LOG:-true}
   env:
     ANSIBLE_CONFIG: "../../.ansible.cfg"
-    ANSIBLE_FORCE_COLOR: "True"
+    ANSIBLE_FORCE_COLOR: "true"
     # disable nologs
     MOLECULE_NOLOG: 0
     # disable destroy
@@ -54,14 +60,8 @@ verifier:
   name: "ansible"
 
 scenario:
-  name: "cicd-debian-11"
+  name: "{{ scenario.name }}"
   test_sequence:
-    - "destroy"
-    - "syntax"
-    - "dependency"
-    - "create"
-    - "prepare"
-    - "converge"
-    - "idempotence"
-    - "verify"
-    - "destroy"
+{% for test in bootstrap_playbook__molecule_test_sequence %}
+    - "{{ test }}"
+{% endfor %}

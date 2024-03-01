@@ -1,23 +1,29 @@
 ---
 - name: "Converge"
-  hosts: "all"
+  hosts: "local"
   tasks:
-    # replace these tasks with whatever you find suitable to test
-    - name: "Copy something to test use of synchronize module"
-      ansible.builtin.copy:
-        src: "/etc/hosts"
-        dest: "/tmp/hosts-from-controller"
-        mode: 0700
 
     - name: "Include tool.bootstrap_playbook"
       tags:
         - "tool.bootstrap_playbook"
       vars:
-        bootstrap_playbook_base_path: "{{ inv_bootstrap_playbook_base_path }}"
-        bootstrap_playbook_meta_playbook_name: "{{ inv_bootstrap_playbook_meta_playbook_name }}"
-        bootstrap_playbook_meta_namespace: "{{ inv_bootstrap_playbook_meta_namespace }}"
-        bootstrap_playbook_tags: "{{ inv_bootstrap_playbook_tags }}"
-        bootstrap_playbook_meta_company: "{{ inv_bootstrap_playbook_meta_company }}"
-        bootstrap_playbook_meta_description: "{{ inv_bootstrap_playbook_meta_description }}"
+        bootstrap_playbook__user: "{{ inv_bootstrap_playbook__user }}"
+        bootstrap_playbook__base_path: "{{ inv_bootstrap_playbook__base_path }}"
+        bootstrap_playbook__meta_author: "{{ inv_bootstrap_playbook__meta_author }}"
+        bootstrap_playbook__meta_namespace: "{{ inv_bootstrap_playbook__meta_namespace }}"
+        bootstrap_playbook__meta_role_name: "{{ inv_bootstrap_playbook__meta_role_name }}"
+        bootstrap_playbook__meta_description: "{{ inv_bootstrap_playbook__meta_description }}"
+        bootstrap_playbook__meta_company: "{{ inv_bootstrap_playbook__meta_company }}"
+        bootstrap_playbook__meta_license: "{{ inv_bootstrap_playbook__meta_license }}"
+        bootstrap_playbook__tags: "{{ inv_bootstrap_playbook__tags }}"
+        bootstrap_playbook__molecule_driver: "{{ inv_bootstrap_playbook__molecule_driver }}"
+        bootstrap_playbook__path: "{{ inv_bootstrap_playbook__path }}"
+        bootstrap_playbook__folders: "{{ inv_bootstrap_playbook__folders }}"
+        bootstrap_playbook__molecule_scenarios: "{{ inv_bootstrap_playbook__molecule_scenarios }}"
+        bootstrap_playbook__inventory_groups: "{{ inv_bootstrap_playbook__inventory_groups }}"
+        bootstrap_playbook__requirements: "{{ inv_bootstrap_playbook__requirements }}"
+        bootstrap_playbook__platforms: "{{ inv_bootstrap_playbook__platforms }}"
+        bootstrap_playbook__molecule_test_sequence: "{{ inv_bootstrap_playbook__molecule_test_sequence }}"
+        bootstrap_playbook__configuration_files: "{{ inv_bootstrap_playbook__configuration_files }}"
       ansible.builtin.include_role:
         name: "tool.bootstrap_playbook"

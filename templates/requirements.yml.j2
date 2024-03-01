@@ -1,0 +1,6 @@
+---
+{% for requirement in bootstrap_playbook__requirements %}
+- name: "{{ requirement.name }}"
+  src: "{{ requirement.src }}"
+
+{% endfor %}

@@ -1,6 +1,21 @@
 ---
 all:
   children:
-    local:
+{% for scenario in bootstrap_playbook__molecule_scenarios %}
+    {{ scenario.target_group }}:
       hosts:
-        molecule-local-instance-1-{{ bootstrap_playbook_meta_playbook_name.replace("_", "-") }}:
+{% for n in range(scenario.hosts)  %}
+        molecule-{{ scenario.target_group }}-instance-{{ loop.index }}-{{ bootstrap_playbook__meta_playbook_name.replace('_', '-') }}:
+{% endfor %}
+{% endfor %}
+{% if bootstrap_playbook__inventory_groups | default(false) %}
+{% for group in bootstrap_playbook__inventory_groups %}
+    {{ group }}:
+      hosts:
+{% for scenario in bootstrap_playbook__molecule_scenarios %}
+{% for n in range(scenario.hosts)  %}
+        molecule-{{ scenario.target_group }}-instance-{{ loop.index }}-{{ bootstrap_playbook__meta_playbook_name.replace('_', '-') }}:
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% endif %}

@@ -2,7 +2,7 @@
 # Don't forget to keep this file updated
 # molecule/<scenario>/verify.yml
 - name: "Verify"
-  hosts: "all"
+  hosts: "local"
   gather_facts: false
   tasks:
 
@@ -10,4 +10,4 @@
       register: bootstraped_playbook_directory
       failed_when: not bootstraped_playbook_directory.stat.exists
       ansible.builtin.stat:
-        path: "{{ inv_bootstrap_playbook_base_path }}/{{ inv_bootstrap_playbook_meta_namespace }}.{{ inv_bootstrap_playbook_meta_playbook_name }}"
+        path: "{{ inv_bootstrap_playbook__base_path }}/{{ inv_bootstrap_playbook__meta_namespace }}.{{ inv_bootstrap_playbook__meta_playbook_name }}"

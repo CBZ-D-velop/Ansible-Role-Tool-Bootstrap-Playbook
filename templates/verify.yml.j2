@@ -2,6 +2,6 @@
 # Don't forget to keep this file updated
 # molecule/<scenario>/verify.yml
 - name: "Verify"
-  hosts: "all"
-  gather_facts: false
+  hosts: "{{ scenario.target_group }}"
+  gather_facts: true
   tasks:
