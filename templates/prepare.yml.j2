@@ -28,7 +28,7 @@
       changed_when: output.rc != 0
       ansible.builtin.shell: "{% raw %}echo \"{{ hostvars[host]['ansible_default_ipv4']['address'] }}  {{ host }} # from Molecule\" >> /etc/hosts{% endraw %}"
 
-{% if role.ssl | default(false ) %}
+{% if scenario.ssl | default(false ) %}
 {% raw %}
     - name: "Import cryptographic content if needed (cert)"
       loop: "{{ inv_cert_bundles }}"
