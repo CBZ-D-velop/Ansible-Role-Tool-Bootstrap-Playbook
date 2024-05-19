@@ -43,7 +43,7 @@ provisioner:
 {% else %}
     extra-vars: "@./../../tests/tower/tower.yml"
 {% endif %}
-  log: ${MOLECULE_ANSIBLE_LOG:-true}
+  log: true
   env:
     ANSIBLE_CONFIG: "../../.ansible.cfg"
     ANSIBLE_FORCE_COLOR: "true"

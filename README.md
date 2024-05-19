@@ -145,10 +145,10 @@ bootstrap_playbook__folders:
   - "tests/certs"
 
 bootstrap_playbook__molecule_scenarios:
-  - { ssl: true, hosts: 3, name: "default", target_group: "local", docker_image: "robincbz/debian-12-ansible:latest" }
-  - { ssl: true, hosts: 3, name: "cicd-debian-11", target_group: "cicd-debian-11", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_11_ANSIBLE}" }
-  - { ssl: true, hosts: 3, name: "cicd-debian-12", target_group: "cicd-debian-12", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_12_ANSIBLE}" }
-  - { ssl: true, hosts: 3, name: "cicd-ubuntu-22", target_group: "cicd-ubuntu-22", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_UBUNTU_22_ANSIBLE}" }
+  - { ssl: true, hosts: 3, name: "default", target_group: "local", docker_image: "labocbz/ansibletest-debian-12:latest" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-11", target_group: "cicd-debian-11", docker_image: "${NEXUS_DOCKER_GROUP_REGISTRY}/${DOCKER_IMAGE__ANSIBLETEST_DEBIAN_11}" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-12", target_group: "cicd-debian-12", docker_image: "${NEXUS_DOCKER_GROUP_REGISTRY}/${DOCKER_IMAGE__ANSIBLETEST_DEBIAN_12}" }
+  - { ssl: true, hosts: 3, name: "cicd-ubuntu-22", target_group: "cicd-ubuntu-22", docker_image: "${NEXUS_DOCKER_GROUP_REGISTRY}/${DOCKER_IMAGE__ANSIBLETEST_UBUNTU_22}" }
 
 bootstrap_playbook__inventory_groups:
   - "SQL"
@@ -224,10 +224,10 @@ inv_bootstrap_playbook__folders:
   - "tests/certs"
 
 inv_bootstrap_playbook__molecule_scenarios:
-  - { ssl: true, hosts: 3, name: "default", target_group: "local", docker_image: "robincbz/debian-12-ansible:latest" }
-  - { ssl: true, hosts: 3, name: "cicd-debian-11", target_group: "cicd-debian-11", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_11_ANSIBLE}" }
-  - { ssl: true, hosts: 3, name: "cicd-debian-12", target_group: "cicd-debian-12", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_DEBIAN_12_ANSIBLE}" }
-  - { ssl: true, hosts: 3, name: "cicd-ubuntu-22", target_group: "cicd-ubuntu-22", docker_image: "${NEXUS_REPOS_DOCKER_REGISTRY}/${DOCKER_IMAGE_UBUNTU_22_ANSIBLE}" }
+  - { ssl: true, hosts: 3, name: "default", target_group: "local", docker_image: "labocbz/ansibletest-debian-12:latest" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-11", target_group: "cicd-debian-11", docker_image: "${NEXUS_DOCKER_GROUP_REGISTRY}/${DOCKER_IMAGE__ANSIBLETEST_DEBIAN_11}" }
+  - { ssl: true, hosts: 3, name: "cicd-debian-12", target_group: "cicd-debian-12", docker_image: "${NEXUS_DOCKER_GROUP_REGISTRY}/${DOCKER_IMAGE__ANSIBLETEST_DEBIAN_12}" }
+  - { ssl: true, hosts: 3, name: "cicd-ubuntu-22", target_group: "cicd-ubuntu-22", docker_image: "${NEXUS_DOCKER_GROUP_REGISTRY}/${DOCKER_IMAGE__ANSIBLETEST_UBUNTU_22}" }
 
 inv_bootstrap_playbook__inventory_groups:
   - "SQL"
@@ -334,6 +334,14 @@ Here you can put your change to keep a trace of your work and decisions.
 * You can now define your configuration list file
 * You can now define docker images for your scenario
 * You can now define how much hosts to create for each scenarios
+
+### 2024-05-19: New CI
+
+* Added Markdown lint to the CICD
+* Rework all Docker images
+* Change CICD vars convention
+* New workers
+* Removed all automation based on branch
 
 ## Authors
 
