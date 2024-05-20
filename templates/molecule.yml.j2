@@ -62,6 +62,6 @@ verifier:
 scenario:
   name: "{{ scenario.name }}"
   test_sequence:
-{% for test in bootstrap_playbook__molecule:test_sequence %}
+{% for test in bootstrap_playbook__molecule_test_sequence %}
     - "{{ test }}"
 {% endfor %}
